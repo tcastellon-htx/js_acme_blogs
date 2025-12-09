@@ -110,7 +110,8 @@ window.toggleCommentButton = function (postId) {
 
 window.toggleComments = function (e, postId) {
   if (!e || !postId) return;
-  return [toggleCommentSection(postId), toggleCommentButton(postId)];
+  const id = parseInt(postId);
+  return [toggleCommentSection(id), toggleCommentButton(id)];
 };
 
 /* ========= Posts ========= */
@@ -146,9 +147,13 @@ window.createPosts = function (posts) {
 
 window.displayPosts = function (posts) {
   const main = document.querySelector("main");
-  if (!posts) {
-    return createElemWithText("p", "Select a user", "default-text");
+  deleteChildElements(main);
+
+  if (!posts || posts.length === 0) {
+    main.append(createElemWithText("p", "Select a user", "default-text"));
+    return;
   }
+
   const frag = createPosts(posts);
   main.append(frag);
   return frag;
@@ -175,8 +180,6 @@ window.removeButtonListeners = function () {
 
 window.refreshPosts = function (posts) {
   if (!posts) return;
-  const main = document.querySelector("main");
-  deleteChildElements(main);
   return [displayPosts(posts), addButtonListeners()];
 };
 
@@ -206,3 +209,4 @@ window.initApp = async function () {
 };
 
 window.addEventListener("DOMContentLoaded", initApp);
+
